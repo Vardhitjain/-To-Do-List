@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <ul id="todos"></ul>
+
+  <script>
+    // Fetch todo items from the API
+    fetch('http://localhost:3000/api/todos') 
+      .then(response => {
+        if (!response.ok) {
+            
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(todos => {
+        const todosList = document.getElementById('todos');
+        todos.forEach(todo => {
+          const li = document.createElement('li');
+          li.textContent = `${todo.title} - ${todo.description} (${todo.state})`;
+          todosList.appendChild(li);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching todos:', error);
+        const todosList = document.getElementById('todos');
+        const errorLi = document.createElement('li');
+        errorLi.textContent = 'Failed to fetch to-dos. Please try again later.';
+        todosList.appendChild(errorLi);
+      });
+  </script>
+</body>
+</html>
